@@ -1,0 +1,9 @@
+Edição 01/09/2019
+
+
+conceptmap.component.html
+Foi criado um div para o minimapa MyOverView
+
+conceptmap.component.ts
+$("TreeExpanderButton",     Criado para poder adicionar o botao de expandir a arvore   
+foi criado um myDiagram.layout =$(go.TreeLayout Para adicionar a opção de minimizar a arvore

@@ -5,6 +5,10 @@ import { Subscription } from 'rxjs/Subscription';
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { AuthService } from '../../_services/auth/auth.service';
 import { User } from '../../_models/user.model';
+import { myDiagram, createModelMerge } from 'app/edit/conceptmap/conceptmap.component';
+import { MergeService } from '../../_services/index.service';
+import swal from 'sweetalert2';
+
 const misc: any = {
     navbar_menu_visible: 0,
     active_collapse: true,
@@ -30,7 +34,7 @@ export class NavbarComponent implements OnInit {
 
     @ViewChild('app-navbar-cmp') button: any;
 
-    constructor(location: Location, private renderer: Renderer, private element: ElementRef, private router: Router, private authService: AuthService) {
+    constructor(location: Location, private renderer: Renderer, private element: ElementRef, private router: Router, private authService: AuthService, private mergeService: MergeService) {
         this.location = location;
         this.nativeElement = element.nativeElement;
         this.sidebarVisible = false;
@@ -234,6 +238,41 @@ export class NavbarComponent implements OnInit {
         e.preventDefault();
         //this.router.navigate(['pages','find', this.search]);
         window.location.href = '/pages/find/'+this.search;
+    }
+    searchDisease(e){
+        e.preventDefault();
+        const body = {
+            mapsSearch: {
+                nodeDataArray: myDiagram.model.nodeDataArray,
+                linkDataArray: (myDiagram as any).model.linkDataArray,
+                name: this.search
+            }        
+        }
+        
+        this.mergeService.merge(body)
+        .subscribe(data => {
+            if((data as any).body.name == null){
+                console.log('nao encontrou nadaaaaa');
+                swal({
+                    title: 'Doença não encontrada',
+                    text: 'Favor revisar nome da doença buscada ',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ok',
+                    cancelButtonText: 'Sair',
+                    confirmButtonClass: "btn btn-success",
+                    cancelButtonClass: "btn btn-danger",
+                    buttonsStyling: false
+                })
+            }
+            
+            createModelMerge(data);
+
+        }, error => console.log(error)
+        )
+
+        console.log("buscando doenca: " + this.search);
+        console.log(myDiagram.model.nodeDataArray);
     }
 
 }

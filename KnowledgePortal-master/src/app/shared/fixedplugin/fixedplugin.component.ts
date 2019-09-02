@@ -271,18 +271,18 @@ export class FixedpluginComponent implements OnInit {
             const body = {
                 maps: {
                     nodeDataArray: myDiagram.model.nodeDataArray,
-                    linkDataArray: myDiagram.model
+                    linkDataArray: (myDiagram as any).model.linkDataArray
                 }
             }
 
             this.mergeService.merge(body)
                 .subscribe(data => {
                     createModelMerge(data);
-                    console.log('nome = ' + myDiagram.model);
+                    console.log('nome = ' + (myDiagram as any).model.title);
                     //-------                    
                     swal({
                         title: 'Analise dos sintomas',
-                        text: 'Possiveis doenças: ' + myDiagram.model,
+                        text: 'Possiveis doenças: ' + (myDiagram as any).model.title,
                         type: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Ok',
@@ -298,6 +298,42 @@ export class FixedpluginComponent implements OnInit {
             console.log(body); //existe sim! lol
         });
 
+        $('#bt-search-green').click((event) => {
+            const body = {
+                mapsGreen: {
+                    nodeDataArray: myDiagram.model.nodeDataArray,
+                    linkDataArray: (myDiagram as any).model.linkDataArray
+                }
+            }
+
+            this.mergeService.merge(body)
+                .subscribe(data => {
+                    createModelMerge(data);
+
+                }, error => console.log(error)
+                )
+
+            console.log(body); //existe sim! lol
+        });
+
+        $('#bt-search-purple').click((event) => {
+            const body = {
+                mapsPurple: {
+                    nodeDataArray: myDiagram.model.nodeDataArray,
+                    linkDataArray: (myDiagram as any).model.linkDataArray
+                }
+            }
+
+            this.mergeService.merge(body)
+                .subscribe(data => {
+                    createModelMerge(data);
+
+                }, error => console.log(error)
+                )
+
+            console.log(body); //existe sim! lol
+        });
+        
         $('#bt-save-info').click((event) => {
             event.preventDefault();
             let moreInfo = $('#info-textarea').val();

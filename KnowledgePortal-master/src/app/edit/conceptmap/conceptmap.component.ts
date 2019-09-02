@@ -354,13 +354,16 @@ export class ConceptMapComponent implements AfterViewInit, OnDestroy {
                         cursor: "pointer",
                         fill: $(go.Brush, "Linear", { 0: "rgb(254, 201, 0)", 1: "rgb(254, 162, 0)" }),
                         stroke: "black"
-                    },
+                    },                    
                     // Shape.fill is bound to Node.data.color
                     new go.Binding("fill", "color").makeTwoWay(),
                     new go.Binding("stroke", "stroke").makeTwoWay(),
                     new go.Binding("stroke", "", function (data) { return data.error ? "red" : data.stroke ? data.stroke : "black"; }),
                     new go.Binding("strokeWidth", "error", function (t) { return t ? 3 : 1; })
                 ),
+                $("TreeExpanderButton",        
+                { alignment: go.Spot.BottomRight, alignmentFocus: go.Spot.Top },
+                { visible: true }), //TESTE APAGAR DEPOIS
                 $(go.TextBlock,
                     {
                         font: "bold 12px sans-serif",
@@ -622,6 +625,11 @@ export class ConceptMapComponent implements AfterViewInit, OnDestroy {
                     { click: checkInconsistence })
             ); // end Adornment
 
+                  myDiagram.layout = $(go.TreeLayout, { angle: 90 }); // TESTE APAGAR DEPOIS
+                  var myOverview =
+                  $(go.Overview, "myOverviewDiv",
+                    { observed: myDiagram }); //TESTE APAGAR DEPOIS... MINIMAPA DA ARVORE DE ANAMNESE
+
         conceptNodeTemplate.selectionAdornmentTemplate = selectionAdornmentTemplate;
         relationNodeTemplate.selectionAdornmentTemplate = selectionAdornmentTemplate;
         mapTemplate.selectionAdornmentTemplate = selectionAdornmentTemplate;
@@ -660,6 +668,7 @@ export class ConceptMapComponent implements AfterViewInit, OnDestroy {
         });
         myDiagram.commitTransaction("change color");
     }
+
 }
 
 export function loadModel(loadedModel) {
@@ -757,3 +766,4 @@ export function realTimeUpdateModel(model) {
     myDiagram.model.applyIncrementalJson(JSON.stringify(diff));
     initListener();
 }
+
